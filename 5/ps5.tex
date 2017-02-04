@@ -1,0 +1,618 @@
+%me=0 student solutions (ps file), me=1 - my solutions (sol file), me=2 - assignment (hw file)
+\def\me{0}
+\def\num{5}  %homework number
+\def\due{Tuesday, October 13}  %due date
+\def\course{CSCI-GA.1170-001/002 Fundamental Algorithms} %course name, changed only once
+\def\name{GOWTHAM GOLI (N17656180)}   %student changes (instructor keeps!)
+%
+\iffalse
+INSTRUCTIONS: replace # by the homework number.
+(if this is not ps#.tex, use the right file name)
+
+  Clip out the ********* INSERT HERE ********* bits below and insert
+appropriate TeX code.  Once you are done with your file, run
+
+  ``latex ps#.tex''
+
+from a UNIX prompt.  If your LaTeX code is clean, the latex will exit
+back to a prompt.  To see intermediate results, type
+
+  ``xdvi ps#.dvi'' (from UNIX prompt)
+  ``yap ps#.dvi'' (if using MikTex in Windows)
+
+after compilation. Once you are done, run
+
+  ``dvips ps#.dvi''
+
+which should print your file to the nearest printer.  There will be
+residual files called ps#.log, ps#.aux, and ps#.dvi.  All these can be
+deleted, but do not delete ps1.tex. To generate postscript file ps#.ps,
+run
+
+  ``dvips -o ps#.ps ps#.dvi''
+
+I assume you know how to print .ps files (``lpr -Pprinter ps#.ps'')
+\fi
+%
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usetikzlibrary{calc,trees,positioning,arrows,fit,shapes,calc}
+\usetikzlibrary{trees}
+\usepackage{mathtools}
+\usepackage{float}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\evensidemargin}{.0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1, Page \arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf \course} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcounter{pppp}
+\newcommand{\prob}{\arabic{pppp}}  %problem number
+\newcommand{\increase}{\addtocounter{pppp}{1}}  %problem number
+
+%first argument desription, second number of points
+\newcommand{\newproblem}[2]{
+\ifnum\me=0
+\ifnum\prob>0 \newpage \fi
+\increase
+\setcounter{page}{1}
+\handout{\name, Homework \num, Problem \arabic{pppp}}{\today}{Name: \name}{Due:
+\due}{Solutions to Problem \prob\ of Homework \num\ (#2)}
+\else
+\increase
+\section*{Problem \num-\prob~(#1) \hfill {#2}}
+\fi
+}
+
+%\newcommand{\newproblem}[2]{\increase
+%\section*{Problem \num-\prob~(#1) \hfill {#2}}
+%}
+
+\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+\def\qed{\hspace*{\fill}
+        \vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+\newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+                      {\qed \end{trivlist}}
+\newenvironment{solsketch}{\begin{trivlist}\item[]{\bf Solution Sketch:}}
+                      {\qed \end{trivlist}}
+\newenvironment{code}{\begin{tabbing}
+12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+{\end{tabbing}}
+
+%\newcommand{\eqref}[1]{Equation~(\ref{eq:#1})}
+
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+%Put more macros here, as needed.
+\newcommand{\room}{\medskip\ni}
+\newcommand{\brak}[1]{\langle #1 \rangle}
+\newcommand{\bit}[1]{\{0,1\}^{#1}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\C}{{\cal C}}
+
+\newcommand{\nin}{\not\in}
+\newcommand{\set}[1]{\{#1\}}
+\renewcommand{\ni}{\noindent}
+\renewcommand{\gets}{\leftarrow}
+\renewcommand{\to}{\rightarrow}
+\newcommand{\assign}{:=}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+\newcommand{\Forr}{\mbox{\bf For }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\Do}{\mbox{\bf Do }}
+\newcommand{\Ifi}{\mbox{\bf If }}
+\newcommand{\Then}{\mbox{\bf Then }}
+\newcommand{\Elsee}{\mbox{\bf Else }}
+\newcommand{\Whilee}{\mbox{\bf While }}
+\newcommand{\Repeatt}{\mbox{\bf Repeat }}
+\newcommand{\Until}{\mbox{\bf Until }}
+\newcommand{\Returnn}{\mbox{\bf Return }}
+\newcommand{\Swap}{\mbox{\bf Swap }}
+
+\begin{document}
+
+\ifnum\me=0
+%\handout{PS\num}{\today}{Name: **** INSERT YOU NAME HERE ****}{Due:
+%\due}{Solutions to Problem Set \num}
+%
+%I collaborated with *********** INSERT COLLABORATORS HERE (INDICATING
+%SPECIFIC PROBLEMS) *************.
+\fi
+\ifnum\me=1
+\handout{PS\num}{\today}{Name: Yevgeniy Dodis}{Due: \due}{Solution
+{\em Sketches} to Problem Set \num}
+\fi
+\ifnum\me=2
+\handout{PS\num}{\today}{Lecturer: Yevgeniy Dodis}{Due: \due}{Problem
+Set \num}
+\fi
+
+\newproblem{Comparisons}{8 points}
+Consider a sorted array $A$ of $n$ elements and two integers $x$ and $y$ not in the array, with $x \le y$. A comparison based algorithm computes how many elements in $A$ are less than both $x$ and $y$, how many elements are between $x$ and $y$ and how many are bigger than both $x$ and $y$. What is the best lower bound (precise answer, not asymptotic) you can prove (using the decision tree technique) for the time complexity of the algorithm? 
+\ifnum\me<2
+\begin{solution}
+
+Each leaf node in the decision tree can be viewed as a sequence of elements of $A$ that are divided into 3 parts. 
+\begin{itemize}
+
+
+\item The first part corresponds to all those elements of $A$ that are lesser than both $x$ and $y$ (could be empty)
+
+\item The second part corresponds to all those elements of $A$ that are in between $x$ and $y$ (could be empty)
+
+\item The third part corresponds to all those elements of $A$ that are greater than both $x$ and $y$ (could be empty)
+\end{itemize}
+
+Therefore the number of leaf nodes in the decision tree will be equal to the number of ways in which we can place two partitions among the $n$ sorted elements of $A$ which can be viewed as selecting two elements from $n+2$ elements = $\binom{n+2}{2} = \frac{(n+2)(n+1)}{2}$. Let it be $l$
+
+
+
+The lower bound on the height of the decision trees in which each permutation
+appears as a reachable leaf is a lower bound on the running time of any
+comparison sort algorithm. So let $h$ be the height of the binary tree and since a binary tree of height $h$ can have no more than $2^h$ leaves, we have
+\begin{equation*}
+l \leq 2^h \implies \frac{(n+2)(n+1)}{2} \leq 2^h \implies h \geq \log_2  \frac{(n+2)(n+1)}{2} = \log_2 (n+2) + \log_2(n+1) - 1\\
+ \implies h = \Omega(\log n)
+ \end{equation*}
+ 
+ Therefore, the precise lower bound is  $\log_2 (n+2) + \log_2(n+1) - 1$
+
+\end{solution}
+\fi
+\newproblem{Nuts and Bolts}{15 points}
+
+Assume that we are given $n$ bolts and $n$ nuts of different sizes, where each bolt exactly matches one nut. Our goal is to find
+the matching nut for each bolt. The nuts and bolts are too similar to compare directly; however,
+we can test whether any nut is too big, too small, or the same size as any bolt.
+
+\begin{itemize}
+\item[(a)] (4 points) Prove that in the worst case, $\Omega(n \log n)$ nut-bolt tests are required to correctly match up the nuts and bolts.
+
+\ifnum\me<2
+\begin{solution}
+
+We can model the algorithm for the matching nuts and bolts problem using a decision tree. 
+The tree will be a ternary tree as every comparison can lead to three possible outcomes, less than, greater than or equal to. Therefore, if the height of the tree is $h$, there will be atmost $3^h$ number of leaf nodes. We know that the height of the tree corresponds to the worst case number of comparisons made by the algorithm, which is the lower bound of the running time. 
+
+Now consider the input of every permutation of the bolts. Now each of this permutation has to map to a distinct leaf node. Let's assume that any two different inputs from this permutation map to the same leaf node, it means that the algorithm applied to both of these inputs the same permutation with respect to the nuts and the algorithm didn't match them correctly to the corresponding permutation of nuts. Therefore, out assumption is wrong. Therefore, every permutation of bolts map to a unique leaf node. This means there are at least $n!$ leaf nodes. Let the number of leaves be $l$
+
+\begin{equation*}
+l \geq n!, \,\, 3^h \geq l \implies 3^h \geq n! \implies h \geq \log_3 n! \implies h = \Omega(n \log n) 
+\end{equation*}
+\end{solution}
+\fi
+
+\item[(b)] (6 points) Prove that in the worst case,
+$\Omega(n + k\log n)$ nut-bolt tests are required to find $k$ arbitrary matching pairs.
+(Hint: prove two separate lower bounds: $\Omega(n)$ and $\Omega(k \log n)$.)
+\ifnum\me<2
+\begin{solution}
+
+We can model the algorithm for matching $k$ arbitrary matching pairs using a decision tree.The tree will be a ternary tree as every comparison can lead to three possible outcomes, less than, greater than or equal to. Therefore, if the height of the tree is $h$, there will be atmost $3^h$ number of leaf nodes. We know that the height of the tree corresponds to the worst case number of comparisons made by the algorithm, which is the lower bound of the running time. 
+
+For any input of bolts we need to match $k$ arbitrary pairs of nuts with bolts. Therefore, first select any $k$ nuts = $\binom{n}{k}$ and these $n$ can be permuted. Thus, total number of leaf nodes will be at least $n! \times \binom{n}{k} = \frac{n!}{(n-k)!}$. Let $l$ be the number of leaf nodes
+
+\begin{equation*}
+l \geq n!, \,\, 3^h \geq l \implies 3^h \geq \frac{n!}{(n-k)!} \implies h \geq \log_3 \frac{n!}{(n-k)!} \implies h = \Omega(n + k\log n) 
+\end{equation*}
+
+\end{solution}
+\fi
+
+\item[(c)] (5 points) Give a randomized algorithm that runs in expected time $O(n)$ and finds the $k$-th largest nut given any integer $k$. You may assume that it is possible to efficiently sample a random nut/bolt.
+\ifnum\me<2
+
+\begin{solution}
+\section*{Algorithm}
+Let $N$ be nuts and $B$ be bolts. The idea is similar to Quickselect. So the expected running time will be $O(n)$
+\begin{itemize}
+\item Take a random bolt from the set of bolts
+\item Using this bolt, partition the nuts into two parts, which is smaller than this bolt and larger than this bolt i.e $N[1 \ldots p-1]$  and $N[p+1 \ldots n]$
+\item If the matched nut with the above bolt is the $k^{th}$ largest nut then return it
+\item Else, Using this nut to partition the bolts into two parts, which is smaller than this nut and larger than this nut i.e  $B[1 \ldots p-1]$  and $B[p+1 \ldots n]$
+\item If $N[p]$ is smaller than the $k^{th}$ largest nut, then recursively try to find $k^{th}$ largest nut in the $N[p+1 \ldots n ]$ partition
+\item If $N[p]$ is larger than the $k^{th}$ largest nut, then recursively try to find $k^{th}$ largest nut in the $N[1 \ldots p-1 ]$ partition
+\end{itemize}
+\section*{Psuedocode}
+
+In the below psuedocode, {\sc Partition} procedure partitions the nuts and bolts into two parts, the first part contains all the nuts/bolts smaller than the pivot and the second part contains all the nuts/bolts larger than the pivot. The pivot is provided as an argument. When partitioning the nuts, a the last bolt is taken as pivot and when partitioning bolts, the last nut is taken as pivot
+
+\IncMargin{1em}
+\begin{algorithm*}[H]
+\TitleOfAlgo{{\sc Find-Nut}($N, B, low, high, k$)}
+pivot = \sc{Partition}($N, B, low, high, B[high]$)\\
+\If{pivot is k}{
+\textbf{Return} $N[pivot]$
+}
+\sc{Partition}($B, N, low, high, N[high]$)\\
+\If{pivot $<$ k}{
+{\sc Find-Nut}($N, B, pivot+1, high, k$)
+}
+\ElseIf{pivot $>$ k}{
+{\sc Find-Nut}($N, B, low, pivot-1, k$)
+}
+\caption{Algorithm to find $k^{th}$ largest nut in $O(n)$ time}
+\end{algorithm*}
+
+The algorithm is similar to Quickselect, taught in class. Therefore the expected running time is $O(n)$
+\end{solution}
+\fi
+
+\end{itemize}
+
+\newproblem{Faster Counting Sort}{12 points}
+We will consider a variant of the counting sort algorithm that sorts an $n$ element array $A$ whose elements are integers between $1$ and $k$.
+
+\begin{itemize}
+
+\item[(a)] (4 pts) Recall the code of standard counting sort. 
+
+\begin{code}
+ {\sc CountingSort}$(A,B,k,)$\\
+1 let $C$ be a new array\\
+2 \> \Forr $i = 1$ \To $k$\\
+3 \> \> $C[i] = 0$\\
+4 \> \Forr $j = 1$ \To $n$\\
+5 \> \> $C[A[j]] = C[A[j]] + 1$\\
+6 \> \Forr $i = 1$ \To $k$\\
+7 \> \> $C[i] = C[i] + C[i-1]$\\
+8 \> \Forr $j = n$ \To $1$\\
+9 \> \> $B[C[A[j]]] = A[j]$\\
+10 \> \> $C[A[j]] = C[A[j]] -1$\\
+11 \Returnn $B$
+\end{code}
+
+
+After the run of the counting sort, somebody accidentally erased both array $A$ and $B$, but only left array $C$. Design an $O(n)$ procedure \textsc{recoverBfromC} that still reconstructs the sorted array B from C. Why does it only work when sorting integers?
+
+\ifnum\me<2
+\begin{solution}
+\section*{Psuedocode}
+\IncMargin{1em}
+\begin{algorithm*}[H]
+\TitleOfAlgo{{\sc RecoverBfromC}(C, k)}
+$B \leftarrow$ {\sc NewArray}$(n)$\\
+\For{j $\leftarrow$ k to 0}{
+	\If{j is 0}{
+		\While{C[j] $\neq$ 0}{
+			$B[C[j]-1] = j$\\
+			$C[j] = C[j] - 1$\\	
+		}
+	}
+	\Else{
+		\While{C[j] $\neq$ C[j-1]}{
+			$B[C[j]-1] = j$\\
+			$C[j] = C[j] - 1$\\	
+		}
+	}
+
+}
+\Returnn B
+\caption{Algorithm to recover $B$ from $C$ in $O(n)$ time}
+\end{algorithm*}
+
+Counting Sort can be used only on integers because the values of $A$ are used as the indices of $C$ and as the indices can only be integers (and not floating point numbers).However, it is possible to use it on characters but they have to be mapped to integers so that they can be used as indices.
+\end{solution}
+\fi
+
+
+\item[(b)] (4 pts)
+Now, consider the following variant of the Counting Sort algorithm that sorts
+the $n$-element array $A$ whose elements are integers between $1$ and $k$.
+
+\begin{code}
+1 {\sc CountingSortFast}$(A,k,n)$\\
+2 \> \Forr $i = 1$ \To $k$\\
+3 \> \> $C[i] = 0$\\
+4 \> \Forr $j = 1$ \To $n$\\
+5 \> \> $C[A[j]] = C[A[j]] + 1$\\
+6 \> $b = 1$\\
+7 \> \Forr $i = 1$ \To $k$\\
+8 \> \> \Forr $j = 1$ \To $C[i]$\\
+9 \> \> \> $A[b] = i$\\
+10 \> \> \> $b = b+1$\\
+11 \> \Returnn $A$
+\end{code}
+
+ Formally argue the correctness of {\sc CountingSortFast}.
+
+\ifnum\me<2
+\begin{solution}
+\section*{Proof of Correctness}
+\subsection*{Base Case}
+$n = 1$, Let $A[1] = k $ 
+
+The first two \textit{for} loop sets $C[1 \ldots k-1] = 0$ and $C[k] = 1$
+The third \textit{for} loop sets $A[1] = k$ and then returns $A$.
+
+Therefore, $A$ is sorted. Hence the base case true.
+\subsection*{Induction Hypothesis}
+At the end of $i^{th}$ iteration of the \textit{for} loop, $A$ is sorted until $\sum_{j=1}^{i} C[j]$ terms, i.e $A[0 \ldots b_i]$ is sorted where $b_i$ is the value of $b$ at the end of $i^{th}$ iteration
+\subsection*{Induction Step}
+At the end of the $i^{th}$ iteration, $b$ is increased by one value. Now in the $(i+1)^{th}$ iteration, the value of $b$ is one more than that of the previous iteration i.e $b_{i+1} = b_i + 1$
+
+At the end of $i^{th}$ iteration, $A[b_i] = i$. Therefore, in the beginning of $(i+1)^{th}$ iteration,  $A[b_{i+1}] = i+1 \implies A[b_i + 1] > A[b_i] $
+
+ By the induction hypothesis we already know that $A[0 \ldots b_i]$ is sorted. Therefore, $A[0 \ldots b_{i+1}]$ is sorted ($\because A[b_i + 1] > A[b_i]$)
+ 
+ Hence by Induction, we can conclude that the given algorithm is correct
+
+
+\end{solution}
+\fi
+
+\item[(c)] (4 pts) Notice that while {\sc CountingSort} makes in time $3n+2k$
+array assignments, but {\sc CountingSortFast} makes only in time $2n+k$
+array assignments. Further {\sc CountingSortFast} does not use an extra
+array $B$ used by {sc CountingSort}. Explain what the problem with {\sc
+CountingSortFast}. In which realistic use cases would one prefer slightly
+slower {\sc CountingSort}? Justify your answer.
+
+\ifnum\me<2
+\begin{solution}
+
+The {\sc CountingSort} procedure has the property of being stable. i.e It always preserves the relative order of equal elements even after the sorting. If two elements $A[i]$ and $A[j]$ such that $A[i] = A[j]$ and $i <j$ then after the elements are sorted, $A[i]$ will appear before $A[j]$ in $B$. This is because we iterated through $A$ backwards and we decrement $C[i]$ everytime we see $i$, the relative ordering of duplicate elements is preserved whereas {\sc CountingSortFast} is not stable, the relative ordering of the same elements may or may not be preserved
+
+For radix sort to work, the sorting aglorithm performed each time from the least significant digit to the most significant digit has to be stable. So if {\sc CountingSortFast} is used, radix sort might not work
+
+For example, consider that we have a list of first names and last names. Now our task is to sort these names by last name and then by the first. We could use a stable sorting algorithm on the first name. Now all the names are sorted by their first names. Next, we stable sort by the last names. After these two sorts, the names are primarily sorted by their last names. In case, the last names are same, they get sorted by their first names as the relative ordering is preserved. If we use {\sc CountingSortFast} in this case, the names might not get sorted because it doesn't guarantee the relative ordering in the case of same last names
+
+\end{solution}
+\fi
+
+\end{itemize}
+
+\newproblem{Choosing the Right Tool}{9 points}
+
+For each example choose one of the following sorting algorithms and
+carefully justify your choice: {\sc HeapSort}, {\sc RadixSort}, {\sc
+CountingSort}. Give the expected runtime for your choice as precisely as
+possible. If you choose Radix Sort then give a concrete choice for
+the basis (i.e. the value of ``$r$'' in the book) and justify it.
+\hint{We assume that the array itself is stored in memory, so before
+choosing the fastest algorithm, make sure you have the space to run it!}
+
+\begin{itemize}
+ \item[(a)] Sort the length $2^{16}$ array $A$ of $128$-bit integers on a
+device with $100$MB of RAM.
+
+\ifnum\me<2
+\begin{solution}
+
+Given, $n =2^{16}$
+
+Memory needed to store array of length $2^{16}$ of $128$-bit integers = $2^{23}$\\
+RAM capacity is 100 MB =  $100 \times 2^{10}$ KB = $100 \times 2^{20}$ B = $100 \times 2^{23}$ bits
+
+Time taken to sort the given array using heap sort = $O(n \log n) = O(2^{16}. 16) = O(2^{20})$\\
+Extra space required using heap sort = $O(1)$
+
+
+$b = 128 > 16 = \log n $ $\therefore$ choose $r = \log_n = 16$\\
+Time taken to sort the given array using radix sort = $O(2(bn)/(\log n)) = O(256 \times 2^{16}/16) = O(2^{20})$\\
+Extra space required using radix sort = $O(n+2^r) = O(2^{16} + 2^{16}) = O(2^{17}))$
+
+Time taken to sort the given array using counting sort = $O(n+k) = O(2^{16} + 2^{128})$\\
+Extra space required using counting sort = $O(n+k) = O(2^{16} + 2^{128})$
+
+The running time of radix sort and heap sort is the lowest of the three and also there is sufficient space in RAM to allocate the extra space used by radix sort and heap sort. Hence it would be ideal to use heap sort or radix in this case
+
+\end{solution}
+\fi
+
+
+ \item[(b)] Sort the length $2^{24}$ array $A$ of $256$-bit integers on a
+device with $600$MB of RAM.
+
+\ifnum\me<2
+\begin{solution}
+
+Given, $n =2^{16}$
+
+Memory needed to store array of length $2^{24}$ of $256$-bit integers = $2^{32}$ bits = $512 \times 2^{23}$ bits\\
+RAM capacity is 600 MB =  $600 \times 2^{10}$ KB = $600 \times 2^{20}$ B = $600 \times 2^{23}$ bits
+
+Time taken to sort the given array using heap sort = $O(n \log n) = O(2^{24}. 24) = O(24 \times 2^{24})$\\
+Extra space required using heap sort = $O(1)$
+
+$b = 256 > 24 = \log n $ $\therefore$ choose $r = \log_n = 24$\\
+Time taken to sort the given array using radix sort = $O(2(bn)/(\log n)) = O(512 \times 2^{24}/24) = O(64 \times 2^{24}/3)$\\
+Extra space required using radix sort = $O(n+2^r) = O(2^{24} + 2^{24}) = O(2^{25}))$
+
+Time taken to sort the given array using counting sort = $O(n+k) = O(2^{24} + 2^{256})$\\
+Extra space required using counting sort = $O(n+k) = O(2^{24} + 2^{256})$
+
+It is quite clear that there is no sufficient memory in RAM to allocate the extra space required for radix sort and counting sort. So the only option here is to use heap sort
+
+
+\end{solution}
+\fi
+
+
+ \item[(c)] Sort the length $2^{16}$ array $A$ of $16$-bit integers on a
+device with $1$GB of RAM.
+
+\ifnum\me<2
+\begin{solution}
+
+Given, $n =2^{16}$
+
+Memory needed to store array of length $2^{16}$ of $16$-bit integers = $2^{20}$ bits\\
+RAM capacity is 1 GB = $2^{10}$ MB = $2^{20}$ KB = $2^{30}$ B = $2^{33}$ bits
+
+Time taken to sort the given array using heap sort = $O(n \log n) = O(2^{16}. 2^4) = O(2^{20})$\\
+Extra space required using heap sort = $O(1)$
+
+$ b = 16 = 16 = \log n$ $\therefore$ choose $r = \log_n = 16$
+Time taken to sort the given array using radix sort = $O(2(bn)/(\log n) = O(32 \times 2^{16}/16) = O(2^{17})$\\
+Extra space required using radix sort = $O(n+2^r) = O(2^{16} + 2^{16}) = O(2^{17}))$
+
+Time taken to sort the given array using counting sort = $O(n+k) = O(2^{16} + 2^{16}) = O(2^{17})$\\
+Extra space required using counting sort = $O(n+k) = O(2^{16} + 2^{16}) = O(2^{17})$
+
+counting sort and radix sort takes the least time to sort the given array and also there is sufficient space in the RAM to allocate the extra space that counting sort and radix sort takes. Hence it would be ideal to use counting sort or radix sort in this case(In this case, radix sort = counting sort)
+
+\end{solution}
+\fi
+\end{itemize}
+
+
+
+
+\newproblem{Finding the Major Elements}{
+15 points}
+
+
+
+Let us say that a number $x$ is {\em $c$-major} for an $n$-element array
+$A$, if more than  $n/c$ elements of $A$ are equal to $x$.
+
+\begin{itemize}
+ \item[(a)] (6 pts) Give $O(n)$-time algorithm to find all $2$-major elements of
+$A$. How many could there be?
+
+\ifnum\me<2
+\begin{solution}
+
+The key idea here is that the 2-majority element remains preserved when a pair of distinct elements are canceled out from the array. 
+
+Let $\alpha$ is the 2-majority element in the array. Now if two distinct elements $\beta$ and $\gamma$ are discarded, the array length now becomes $n-2$. Therefore $\alpha$ is a 2-majority element. If two distinct elements $\alpha$ and $\beta$ are discarded the array length becomes $n-2$ and there are $> n/2-1$ occurrences of $\alpha$. Therefore $\alpha$ is a 2-majority element.
+
+Let there be $x$ number of 2 majority elements in $A$. Therefore, there are at least $xn/2$ elements in $A$ 
+
+$\therefore xn/2 < n \implies x < 2 \implies $ There can be only one 2-majority element in $A$
+
+\section*{Psuedocode}
+\IncMargin{1em}
+\begin{algorithm*}[H]
+\TitleOfAlgo{{\sc Find-2-Majority}(A)}
+$ count \leftarrow 0$\\
+\For{i $\leftarrow$ 0 to n-1}{
+	\uIf{count is 0}{
+		$x \leftarrow A[i]$\\
+		$count \leftarrow 1$\\
+	}
+	\uElseIf{x $\neq$ A[i]}{
+		$count \leftarrow count - 1$\\
+	}
+	\Elsee{
+		$count \leftarrow count+1$\\
+	}
+}
+$num \leftarrow $ \sc{Count-Occurrences}($x,A$)\\
+\uIf{num $>$ n/2}{
+	\Returnn $x$
+}
+\uElse{
+\Returnn NotFound
+}
+
+\caption{Algorithm to find 2-majority element of $A$ in $O(n)$ time}
+\end{algorithm*}
+ \pagebreak
+ In the above psuedocode, during $i^{th}$ iteration, we compare $A[i-1]$ with $x$ and cancel both if they are different, and increment count otherwise.
+ 
+ So if $count=0$, then all elements upto $A[i-1]$ would have been eliminated through  distinct-elements pair formations. If $count >0$, then $\{x ,\ldots$ count times $\ldots ,x, A[i], \ldots A[n-1]\}$ elements would have still survived at the end of the $i^{th}$ iteration. Therefore we are effectively canceling out the distinct elements. Thus at the end of the \textit{for} loop, if there is a 2-majority element it survives. We are doing a linear scan of the array in the for loop and in the last step we find the number of occurrences of $x$ in $A$ which also takes linear time. Therefore running time of the algorithm is $O(n)$ 
+\end{solution}
+\fi
+
+\item[(b)] (9 pts) Give $O(cn)$-time algorithm to find all $c$-major elements
+of $A$. How many could there be?
+
+\ifnum\me<2
+\begin{solution} 
+Following the same idea, that if $c$ distinct elements of the array are canceled out the $c$ majority element still remains preserved in the array.
+
+In the below psuedocode, we maintain two arrays \textit{temp} and \textit{count} of length $k$. We keep iterating over the $n$ elements of the given array and if it matches with any of the $k$ elements in \textit{temp}, we increase the \textit{count} of that element. If none of the elements of \textit{temp} matches, we decrease the count of every element (i.e we are canceling out the distinct elements). If there is an empty slot in \textit{temp} (i.e \textit{count} of that element is 0) then we place the element at that position and set it's \textit{count} to 1. At then end, we individually check for each element of \textit{temp}, if it is a c-majority element.
+
+Let there be $x$ number of $c$ majority elements in $A$. Therefore, there are at least $xn/c$ elements in $A$ 
+
+$\therefore xn/c < n \implies x < c \implies $ There can be at most $c-1$, c-majority elements in $A$
+
+\section*{Psuedocode}
+\IncMargin{1em}
+\begin{algorithm*}[H]
+\TitleOfAlgo{{\sc Find-c-Majority}(A)}
+$temp,count \leftarrow$ {\sc NewArray}($c$)\\
+Initialize $count$ to 0\\
+\For{i $\leftarrow$ 0 $\,\,$to$\,\,$ n-1}{
+	\For{j $\leftarrow$ 0 to $c-1$}{
+		\If{temp[j] is A[i] }{
+			$count[j] \leftarrow count[j]+1$\\
+			\textbf{break}
+		}
+		
+		\If{j is c-1}{
+			\For{p $\leftarrow$ 0 to $c-1$}{
+				\If{count[p] is 0}{
+					$temp[p] \leftarrow A[p]$\\
+					$count[p] \leftarrow 1$\\
+					\textbf{break}
+				} 
+			}
+			\If{p is c-1}{
+				\For{p $\leftarrow$ 0 to $c-1$}{
+					$count[p] \leftarrow count[p]-1$\\
+				}	
+			}
+		}
+	}
+}
+
+\For{i $\leftarrow$ 0 to $c-1$}{
+	$num \leftarrow $ {\sc NumberOfOccurrences}($temp[i], A$)\\
+	\If{$num > n/c$}{
+		$temp[i]$ is a c-major element
+	}
+}
+
+\caption{Algorithm to find c-majority element of $A$ in $O(nk)$ time}
+\end{algorithm*}
+
+\section*{Time Complexity}
+
+The first outer \textit{for} loop runs for $n$ times and all the nested \textit{for} loops run for $c$ times. Therefore, the first phase takes $O(nc)$
+
+The second \textit{for} loop runs for $c$ times and in each iteration we find the number of occurrences of the element of \textit{temp} in $A$. It takes $O(n)$ time. Therefore, the second phase takes $O(nc)$ time. Hence, the total running time of the algorithm  is $O(nc)$
+\end{solution}
+\fi
+\end{itemize}
+
+
+
+
+
+\end{document}
+
+

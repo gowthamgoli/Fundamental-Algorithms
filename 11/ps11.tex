@@ -1,0 +1,530 @@
+%me=0 student solutions (ps file), me=1 - my solutions (sol file), me=2 - assignment (hw file)
+\def\me{0}
+\def\num{11}  %homework number
+\def\due{Tuesday, December 8}  %due date
+\def\course{CSCI-GA.1170-001/002 Fundamental Algorithms} %course name, changed only once
+\def\name{GOWTHAM GOLI (N17656180)}   %student changes (instructor keeps!)
+%
+\iffalse
+INSTRUCTIONS: replace # by the homework number.
+(if this is not ps#.tex, use the right file name)
+
+  Clip out the ********* INSERT HERE ********* bits below and insert
+appropriate TeX code.  Once you are done with your file, run
+
+  ``latex ps#.tex''
+
+from a UNIX prompt.  If your LaTeX code is clean, the latex will exit
+back to a prompt.  To see intermediate results, type
+
+  ``xdvi ps#.dvi'' (from UNIX prompt)
+  ``yap ps#.dvi'' (if using MikTex in Windows)
+
+after compilation. Once you are done, run
+
+  ``dvips ps#.dvi''
+
+which should print your file to the nearest printer.  There will be
+residual files called ps#.log, ps#.aux, and ps#.dvi.  All these can be
+deleted, but do not delete ps1.tex. To generate postscript file ps#.ps,
+run
+
+  ``dvips -o ps#.ps ps#.dvi''
+
+I assume you know how to print .ps files (``lpr -Pprinter ps#.ps'')
+\fi
+%
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usetikzlibrary{calc,trees,positioning,arrows,fit,shapes,calc}
+\usetikzlibrary{trees}
+\usepackage{mathtools}
+\usepackage{float}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\evensidemargin}{.0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1, Page \arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf \course} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcommand{\LCA}{\mbox{\sf LCA}}
+
+\newcommand{\rs}{\rightsquigarrow}
+\newcommand{\ls}{\leftsquigarrow}
+
+\newcounter{pppp}
+\newcommand{\prob}{\arabic{pppp}}  %problem number
+\newcommand{\increase}{\addtocounter{pppp}{1}}  %problem number
+
+%first argument desription, second number of points
+\newcommand{\newproblem}[2]{
+\ifnum\me=0
+\ifnum\prob>0 \newpage \fi
+\increase
+\setcounter{page}{1}
+\handout{\name, Homework \num, Problem \arabic{pppp}}{\today}{Name: \name}{Due:
+\due}{Solutions to Problem \prob\ of Homework \num\ (#2)}
+\else
+\increase
+\section*{Problem \num-\prob~(#1) \hfill {#2}}
+\fi
+}
+
+%\newcommand{\newproblem}[2]{\increase
+%\section*{Problem \num-\prob~(#1) \hfill {#2}}
+%}
+
+\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+\def\qed{\hspace*{\fill}
+        \vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+\newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+                      {\qed \end{trivlist}}
+\newenvironment{solsketch}{\begin{trivlist}\item[]{\bf Solution Sketch:}}
+                      {\qed \end{trivlist}}
+\newenvironment{code}{\begin{tabbing}
+12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+{\end{tabbing}}
+
+%%%%%\newcommand{\eqref}[1]{Equation~(\ref{eq:#1})}
+
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+%Put more macros here, as needed.
+\newcommand{\room}{\medskip\ni}
+\newcommand{\brak}[1]{\langle #1 \rangle}
+\newcommand{\bit}[1]{\{0,1\}^{#1}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\C}{{\cal C}}
+
+\newcommand{\nin}{\not\in}
+\newcommand{\set}[1]{\{#1\}}
+\renewcommand{\ni}{\noindent}
+\renewcommand{\gets}{\leftarrow}
+\renewcommand{\to}{\rightarrow}
+\newcommand{\assign}{:=}
+\newcommand{\cT}{\mathcal{T}}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+\newcommand{\Forr}{\mbox{\bf For }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\Do}{\mbox{\bf Do }}
+\newcommand{\Ifi}{\mbox{\bf If }}
+\newcommand{\Then}{\mbox{\bf Then }}
+\newcommand{\Elsee}{\mbox{\bf Else }}
+\newcommand{\Whilee}{\mbox{\bf While }}
+\newcommand{\Repeatt}{\mbox{\bf Repeat }}
+\newcommand{\Until}{\mbox{\bf Until }}
+\newcommand{\Returnn}{\mbox{\bf Return }}
+\newcommand{\Swap}{\mbox{\bf Swap }}
+
+\begin{document}
+
+\ifnum\me=0
+%\handout{PS\num}{\today}{Name: **** INSERT YOU NAME HERE ****}{Due:
+%\due}{Solutions to Problem Set \num}
+%
+%I collaborated with *********** INSERT COLLABORATORS HERE (INDICATING
+%SPECIFIC PROBLEMS) *************.
+\fi
+\ifnum\me=1
+\handout{PS\num}{\today}{Name: Yevgeniy Dodis}{Due: \due}{Solution
+{\em Sketches} to Problem Set \num}
+\fi
+\ifnum\me=2
+\handout{PS\num}{\today}{Lecturer: Yevgeniy Dodis}{Due: \due}{Problem
+Set \num}
+\fi
+
+
+\newproblem{Greedy Topological Sort}{13 (+2) points}
+
+
+
+\begin{itemize}
+
+\item[(a)](2 pts) Assume directed graph $G$ is acyclic. Show that $G$ has at least one
+vertex $v$ having no outgoing edges.
+
+\ifnum\me<2
+\begin{solution}
+
+Suppose that $G$ is acyclic and every node has at least one outgoing edge. Pick any node $u$ and begin following the outgoing edges from $u$. Since $u$ has at least one outgoing edge $(u,v)$ we can walk forward to $v$. Then since $v$ has at least one outgoing edge $(v,x)$ we can walk forward to $x$. Repeat until we visit a node, say $w$, twice. Let $C$ denote the sequence of nodes encountered between successive visits to $w$ then we can see that $C$ is a cycle. Hence our assumption is wrong. Therefore $G$ has at least one vertex $v$ having no outgoing edges
+\end{solution}
+\fi
+
+\item[(b)](4 pts) Consider the following greedy algorithm for topological
+sort of a directed graph $G$: ``Find a vertex $v$ with no outgoing
+edges. If no such $v$ exists, output `cyclic'. Else put $v$ as the
+last vertex in the topological sort, remove $v$ from $G$ (by also
+removing all incoming edges to $v$), and recurse on the remaining
+graph $G'$ on $(n-1)$ vertices''. Prove that this algorithm is
+correct.
+
+\ifnum\me<2
+\begin{solution}
+
+\textbf{Base Case} 
+
+If $n = 1$, output the single vertex as it has no outgoing edges. Hence the base case is true
+
+\textbf{Induction Hypothesis} 
+
+If $G$ is a graph consisting of $n-1$ vertices such that $G$ has at least one vertex with no outgoing edges i.e $G$ is acyclic then $G$ has a topological ordering
+
+\textbf{Inductive Step}
+
+Given $G$, a DAG on $n$ vertices, let $v$ be the vertex with no outgoing edges. Remove $v$ and all the incoming edges to $v$ from $G$. Let the resulting graph be $G' = G - \{v\}$. Now $G'$ is a DAG since deleting $v$ from $G$ cannot create any cycles. Therefore by Inductive Hypothesis $G'$ has a topological ordering. Now place $v$ at the end of the topological ordering of $G'$. This is valid since $v$ has no outgoing edges
+\end{solution}
+\fi
+
+\item[(c)](3 pts) Using the adjacency list representation, show how to
+properly initialize the field $v.out$ which will contain the out-degree
+of each vertex $v\in V$ in time $O(n+m)$, and $n=|V|$ and $m=|E|$.
+
+\ifnum\me<2
+\begin{solution}
+
+$v.out$ will contain the out-degree of vertex $v$. Therefore it is equal to the size of the linked list $v$ points to, in the adjacency list of $G$. To get the size of linked list, the entire list has to be traversed. Hence the time taken will be $O(deg(v))$ and we do this for each $v \in V$. Therefore the total time is $O(|E|)$ and also we visit each node in $G$ to traverse it's corresponding list which will take $O(|V|)$ time. Therefore the total time taken to initialize $v.out$ for every $v \in V$ is $O(m+n)$
+\end{solution}
+\fi
+
+\item[(d)](4+2 pts) Using part (c), initialize the FIFO queue $Q$ which will
+contain all the vertices of $V$ of out-degree $0$ (i.e., $v.out=0$; by
+part (a), at least one such node exists). Using this queue $Q$ (i.e.,
+the $Q.queue$ and $Q.dequeue$ operations), show a simple iterative
+algorithm to implement the greedy topological sorting algorithm
+described in part (b). Your algorithm should run in time no worse that
+$O(n^2)$. For {\bf extra credit}, do it in time $O(m+n)$.
+
+\ifnum\me<2
+\begin{solution}
+
+\begin{algorithm*}[H]
+\TitleOfAlgo{{\sc Topological-Ordering}($G$)}
+{\sc Create-Queue}($Q$)\\
+\For{each x $\in V$}{
+	\If{x.out is 0}{
+		$Q.queue(x)$
+	}
+}
+$num \leftarrow n$\\
+\While{Q is not empty}{
+	$v \leftarrow Q.dequeue()$\\
+	$T(v) \leftarrow num$\\
+	$num \leftarrow num-1$\\
+	\For{each (x,v) $\in$ E}{
+		$x.out = x.out - 1$\\
+		\If{x.out is 0}{
+			$Q.queue(x)$
+		}
+	}
+}
+\Returnn $T$
+\caption{Topological Ordering of $G$ in $O(m+n)$ time}
+\end{algorithm*}
+
+In the above algorithm, every vertex enters and leaves the queue exactly once. Hence this contributes to $O(n)$ time and after each vertex $v$ is dequeued we reduce $x.out$ by 1 where $(x,v) \in E$. Therefore we visit every incoming edge into a vertex exactly once. Hence this contributes to $O(m)$ time. Therefore the total running time of the above psuedo code is $O(m+n)$ 
+\end{solution}
+\fi
+
+\end{itemize}
+
+\newproblem{Changing One Edge Weight}{10 (+5) points}
+
+Assume $G$ is an undirected graph with weight function $w$, and
+$e_1\ldots e_m$ are the $m$ edges of $G$ sorted according to their
+weight: $w(e_1)\le w(e_2)\le \ldots \le w(e_m)$. Imagine you just ran
+the Kruskall's algorithm of $G$ and it output an MST $T$ of $G$. Now
+assume that somebody changes the weight of a single edge $e_i$ from
+$w(e_i)$ to some other value $w'$. For each of the following 4
+scenarios, describe the fastest algorithm you can think of to
+transform the original MST $T$ of $G$ to a new (and correct) MST $T'$
+of $G$ after the edge weight change. Make sure you justify your
+answer, and express your running time as a function of $m$ and $n$.
+
+\begin{itemize}
+
+\item[(a)](3 pts) Assume $e_i\in T$ and $w'<w(e_i)$ (so we decreased an MST
+edge).
+
+\ifnum\me<2
+\begin{solution}
+
+We decreased an MST Edge. Let the resulting tree be $T'$. Now $T'$ is the new MST as it's weight is lesser than $T$. Therefore the running time is $O(1)$
+\end{solution}
+\fi
+
+\item[(b)](4 pts) Assume $e_i\not \in T$ and $w'<w(e_i)$ (so we decreased a
+non-MST edge).\\
+\hint{Compute the unique shortest path in $T$ between the two
+end-points of $e_i$.}
+
+\ifnum\me<2
+\begin{solution}
+
+Add $e_i$ to MST. So this will result in a cycle. According to the Cycle property in MST we have to remove the edge with the highest weight from that cycle. 
+
+To do this compute the shortest path in $T$ between two end-points of $e_i$ in $O(n)$ time (as $m = n-1$). Let the weight of the heaviest edge in this path be $w$. If $w > w'$ then replace this edge with $e_i$ in $T$. This will take $O(n)$ time. This will be the new MST. Therefore the running time is $O(n)$
+\end{solution}
+\fi
+
+\item[(c)](3 pts) Assume $e_i\not \in T$ and $w'>w(e_i)$ (so we increased a
+non-MST edge).
+
+\ifnum\me<2
+\begin{solution}
+
+We increased a non-MST edge. Therefore the MST will remain the same. Time taken is $O(1)$ 
+\end{solution}
+\fi
+
+\item[(d)](5 pts) {\bf Extra Credit:} Assume $e_i\in T$ and $w'>w(e_i)$ (so
+we increased an MST edge).\\
+\hint{Try to find the smallest weight edge $e_j$ which should replace
+$e_i$ under the new weight.}
+
+\ifnum\me<2
+\begin{solution}
+
+Remove $e_i$ from $T$. Therefore we have two connected components now. Let them be $T_1$ and $T_2$. These connected components can be computed using BFS/DFS in $O(n)$ time. Now consider all those edges such that one end-point lies in $T_1$ and the other end point lies in $T_2$. Let the edge with least weight be $e'_i$. Now add $e'_i$ to $T$. This will take $O(n)$ time. This resulting tree will be the MST. Therefore time taken is $O(n)$
+\end{solution}
+\fi
+
+\end{itemize}
+
+
+
+\newproblem{Second Smallest Spanning Tree} {13 (+5) points}
+
+\begin{itemize}
+\item[(a)] (3 points)
+Using the correctness of the Kruskal/Prim algorithm, show that if no two edges in the input graph have equal weights then the minimum spanning tree is unique.
+\ifnum\me<2
+\begin{solution}
+
+Assume that all the weights of the edges in $G$ are distinct and $G$ has two MSTs $T_1$ and $T_2$. Let $e$ be the edge with the least weight in $G$ that exists in $T_1$ but not in $T_2$. Now if we add $e$ to $T_2$ it will result in a cycle. Let $f$ be some edge in this cycle that is distinct from $e$ i.e $w(f) > w(e)$. Now delete $f$ from $T_2$ and let the resulting tree be $T_2'$. Therefore $w(T_2') < w(T_2)$ but we know that $T_2$ is an MST. This is a contradiction. Hence our assumption must be wrong. Therefore if no two edges in $G$ have equal weights then the MST is unique
+\end{solution}
+\fi
+
+\item[(b)] (5 points) Let $e$ be the maximum weight edge on some cycle of a
+connected graph $G=(V,E)$. Prove that there exists an MST $T$ of $G' =
+(V, E\backslash \{e\})$ which is also an MST of $G$. Namely, some MST
+of $G$ does not include $e$.
+
+\ifnum\me<2
+\begin{solution}
+
+Assume that the MST $T$ of $G$ contains $e$ in it. Let the end points of $e$ be $x$ and $y$. Remove $e$ from $T$. Therefore $T$ has two connected components $T_1$ and $T_2$.
+
+$T_1$ and $T_2$ can be easily computed by using DFS/BFS on $T$. In $G$, start from the vertex $x$ and move along the cycle until we reach $y$. Somewhere in between we will cross an edge $e' \neq e$ such that one end point of $e'$ lies in $T_1$ and the other end point lies in $T_2$.
+
+Since $e$ is the heaviest edge in the cycle, $w(e') < w(e)$. Connect these two components $T_1$ and $T_2$ using $e'$ after removing $e$ from $T$. Let the resulting tree be $T'$. Then clearly $w(T') < w(T)$. But we know that $T$ is an MST. Hence our assumption is wrong i.e $e$ MST of $G$ does not include $e$. 
+
+Therefore there exists an MST of $G' = (V, E\backslash \{e\})$ which is also an MST of $G$
+
+\end{solution}
+\fi
+\pagebreak
+\item[(c)] (5 points) Given a graph $G = (V, E)$ with edge weight function $w: E \mapsto \mathbb{N}$ such that no two edges have equal weight, give an algorithm to find a second smallest spanning tree. Assume that there exists a second smallest
+spanning tree with exactly one edge different from a minimum spanning
+tree. State the running time of your algorithm.
+
+\ifnum\me<2
+\begin{solution}
+
+Given below is the algorithm to find the second smallest spanning tree assuming that the second smallest spanning tree and MST differ by exactly one edge
+\subsection*{Algorithm}
+$T \leftarrow$ {\sc Mst}($G$)\\
+$min\delta = -\infty$\\
+For every edge $e \notin T$ do
+\begin{itemize}
+\item Add $e$ to $T$. Now $T$ has a cycle in $T$.
+\item Let $e'$ be the maximum edge in the cycle next to $e$ and $e' \neq e$
+\item Remove $e'$ from $T$. Let the new tree formed be $T'$
+\item $\delta = w(e) - w(e')$. If $\delta < min\delta$ then $min\delta = \delta$ and $ResT = T'$
+\item Return $ResT$
+\end{itemize}
+
+In the first step we are computing MST of $G$. This will take $O(m \log n)$ time. The \textit{for} loop runs $m-n$ times and finding $e'$ will take $O(n)$ time. Therefore the total running time will be $O(mn + m \log n) = O(mn)$
+\end{solution}
+\fi
+
+\item[(d)] (5 points {\bf Extra credit}) Prove the assumption you used in part (c).
+\ifnum\me<2
+\begin{solution}
+
+Assumption used in part (c) is that the second smallest spanning tree will differ from MST by exactly one edge.
+
+\textbf{Proof by Contradiction}
+
+Let $T'$ be the second smallest spanning tree of $G$ and T be the MST of $G$. Assume that $T'$ differs from $T$ by two or more edges i.e there are at least two edges in $T-T'$ and let $(u,v)$ be one such edge with minimum weight.
+
+Add $(u,v)$ to $T'$ which will result in a cycle $C$ in $T'$. Let $(x,y) \in C$ and $(x,y) \in T'-T$. Now we claim that $w(x,y) > w(u,v)$. Assume that $w(x,y) < w(u,v)$. If we add $(x,y)$ to $T$, it will result in a cycle $C'$ in $T$. Let $(u',v') \in C'$ and $(u',v') \in T-T'$. If $w(x,y) < w(u',v')$ then we can remove $(u', v')$ from $T$ and we will get a new tree $T''$ such that $w(T'') < w(T)$ but we know that $T$ is the MST. Hence $w(u',v') < w(x,y) < w(u,v)$. But we already know that $(u,v)$ is the edge with minimum weight in $T-T'$. Hence our assumption is wrong. Therefore $w(x,y) > w(u,v)$.
+
+Now that $(x,y)$ and $(u,v)$ are on the same cycle $C$, remove $(x,y)$ from $T'$ to get a new tree $T_1'$ which is different from $T$ (as $T_1'$ and $T'$ differ from each other by exactly one edge) and $w(T_1') < w(T')$. This implies that $T'$ is not the second smallest spanning tree which is a contradiction. Hence our assumption is wrong.
+
+Therefore the second smallest spanning tree will differ from MST by exactly one edge
+\end{solution}
+\fi
+
+\end{itemize}
+
+
+
+\newproblem{(Most Reliable Path)}{5 points}
+
+In a directed graph $G=(V,E)$, each edge $(u,v) \in E$ has an associated independent value $r(u,v) \in \mathbb{R}$, $0 \le r(u,v) \le 1$ which represents how secure the channel from vertex $u$ to vertex $v$ is, i.e. the probability that the channel will not fail. Give an algorithm to find the most reliable path between two given vertices.
+
+
+\hint{Notice, here we need to {\em maximize the product}, while we
+know how to {\em minimize the sum}. To ``turn'' maximum into minimum,
+use $\max_{(a_1,\ldots a_k)\in S} (a_1\cdot \ldots \cdot a_k) =
+\min_{(a_1,\ldots a_k)\in S} (\frac{1}{a_1}\cdot \ldots \cdot
+\frac{1}{a_k})$. To ``turn'' product into sum, use $\log(ab) = \log(a)
++ \log(b)$. Make sure you carefully explain how you follow these
+hints.}
+
+\ifnum\me<2
+\begin{solution}
+
+Let $P$ be the the most reliable path between $u$ and $v$ and $(r_1,r_2,\ldots,r_k)$ be the reliabilities of edges in $P$.
+Therefore the product $(r_1 \cdot \ldots \cdot r_k)$ has to be the maximum. Consider the following
+\begin{equation*}
+max_{(r_1,\ldots,r_k)\in E}(r_1\ldots r_k) = min_{(r_1,\ldots,r_k) \in E}(\frac{1}{r_1}\cdot \ldots \cdot \frac{1}{r_k})
+\end{equation*}
+Take $\log$ on both sides
+\begin{align*}
+max_{(r_1,\ldots,r_k)\in E}\{\log (r_1\ldots r_k)\} &= min_{(r_1,\ldots,r_k) \in E}\{\log (\frac{1}{r_1}\cdot \ldots \cdot \frac{1}{r_k})\}\\
+&= min_{(r_1,\ldots,r_k) \in E}\{\log(\frac{1}{r_1}) + \ldots + \log(\frac{1}{r_k})\}\\
+&= min_{(r_1,\ldots,r_k) \in E}\{(-\log r_1) + (-\log r_2) + \ldots + (- \log r_k)\}
+\end{align*}
+Therefore maximizing the product is equivalent to minimizing the sum of $-\log$.
+
+Now transform $G$ into $G'$ such that $V' = V$, $E' = E$ and each edge $(u,v) \in E'$ has a weight a associated to it given by, $w(u,v) = -\log r(u,v)$. Note that $r(u,v) \leq 1 \implies \log r(u,v) \leq 0 \implies w(u,v) \geq 0$. This implies that every edge in $G'$ has a non-negative weight associated to it. Hence djisktra can be called on any node of $G'$
+
+Therefore call dijkstra on every node of $G'$. Let $P$ be the shortest path between any two vertices $(u,v) \in V'$ and $(-\log r_1, \ldots, -\log r_k)$ be the weights of edges in $P$. Therefore the sum $(-\log r_1) + (-\log r_2) + \ldots + (- \log r_k)$ has to be minimum. This implies the product $(r_1 \cdot \ldots \cdot r_k)$ has to be maximum. Therefore $P$ is the most reliable path between $(u,v)$ in $G$.
+\end{solution}
+\fi
+
+
+
+\newproblem{A Party Dilemma}{18 Points}
+
+
+
+Tucker, who lives in a node $s$ of a weighted graph $G$ (with
+non-negative weights), is invited to an exciting party located at a
+node $h$, where he will meet a girl of his dreams, Sharona. Naturally,
+Tucker wants to get from $t$ to $h$ as soon as possible, but he is told
+to buy some beer on the way over.  He can get beer at any supermarket,
+and the supermarkets form a subset of the vertices $B\subset V$. Thus,
+starting at $s$, he must go to some node $b\in B$ of his choice, and
+then head from $b$ to $h$ using the shortest total route possible
+(assume he wastes no time in the supermarket). Help Tucker to meet
+Sharona as soon as possible, by solving the following sub-problems...
+
+\begin{itemize}
+
+\item[(a)](2 pts) Compute the shortest distance from $s$ to all supermarkets
+$b\in B$.
+
+\ifnum\me<2
+\begin{solution}
+
+Call dijkstra on $s$ which gives us the shortest distance from $s$ to every other node in $G$. Return $\delta(s,b)$ for each $b \in B$
+\end{solution}
+\fi
+
+\item[(b)](3 pts) Compute the shortest distance from every supermarket $b\in
+B$ to $h$. Can one simply add a new ``fake'' source $s'$ connected to
+all supermarkets with zero-weight edges and run Dijkstra from $s'$?
+
+\ifnum\me<2
+\begin{solution}
+
+The newly added node $s'$ is directly connected to each of $b \in B$. Therefore any path from $s'$ to $h$ has to path through at least one super market.
+Now running dijkstra on $s'$ gives the shortest path and distance from $s'$ to every other node in $G$.
+
+Let $P$ be the shortest path from $s'$ to $h$. Therefore $P$ must contain at least one super market. Now start moving from $s'$ to $h$ in $P$ and let $b_1, \ldots, b_k \subset B, k \geq 1$ be the super markets that we came across while moving forward from $s'$ to $h$ in the that order. As we know that the sub-path of the shortest path is also a shortest path, we can get the shortest path or distance from each of $b_1, \ldots, b_k \subset B$ to $h$ but this might not give us the shortest distance from every  super market $b \in B$ to $h$. Therefore adding a fake source $s'$ might not work.
+
+However we can simply run dijkstra from $h$. So now we have shortest distance from $h$ to every other node in $G$. Return $\delta(h,b)$ for every $b \in B$
+\end{solution}
+\fi
+
+\item[(c)](4 pts) Combine parts (a) and (b) to solve the full problem.
+
+\ifnum\me<2
+\begin{solution}
+
+From part (a), we have the shortest distance from $s$ to every other vertex in $G$
+
+From part (b), we have the shortest distance from $h$ to every other vertex in $G$.
+
+Let $\delta_b(s,h)$ be the shortest distance from $s$ to $h$ such that the path contains at least one super market. Then $\delta_b(s,h)$ is given by
+\begin{equation*}
+\delta_b(s,h) = min_{b \in B}\{\delta(s,b) + \delta(b,h)\}
+\end{equation*}
+\end{solution}
+\fi
+
+\item[(d)](4 pts) Your solution in part (c) used two calls to the Dijkstra's
+algorithm (one in part (a) and one in part (b). Define a new graph
+$G'$ on $2n$ vertices and at most $2m+n$ edges (and ``appropriate''
+weights on these edges), so that the original problem can be solved
+using a {\em single} Dijkstra call on $G'$.
+
+\ifnum\me<2
+\begin{solution}
+
+\end{solution}
+\fi
+
+\item[(e)](5 pts) Assume now that, in addition to beer, Tucker also needs to
+buy flowers for the beautiful Sharona, and the set of flower shops is
+$F\subset V$. As with supermarkets, Tucker can choose any flower shop
+$f\in F$, and it does not matter if he buys first beer, then flowers or
+vice versa, so he will naturally choose the best among all these
+options (which supermarket, which flower shop, and in what order).
+Show how to solve this problem for the poor Tucker.
+
+\ifnum\me<2
+\begin{solution}
+
+\end{solution}
+\fi
+
+\end{itemize}
+
+
+\end{document}
+
+
